@@ -177,3 +177,31 @@ These APIs are core components available in all modern operating systems for pro
 - The OS uses data structures to track process states, blocked processes, and other resources.
 - **Context switching** is a critical technique that saves a stopped process's state and restores it later.
 - Processes can also exist in special states like **zombie**, where they’ve completed execution but await cleanup.
+
+
+# System Calls: `fork()`, `wait()`, and `exec()`
+
+## 1. `fork()`
+- **Purpose**: Creates a new process by duplicating the calling process.
+- **Return Values**:
+  - `0`: Returned to the **child** process.
+  - Child's PID (positive): Returned to the **parent** process.
+  - `-1`: On failure.
+- **Use Case**: To create a new process (child) that runs the same code as the parent until modified.
+
+## 2. `wait()`
+- **Purpose**: Makes the parent process wait until one of its child processes terminates.
+- **Usage**:
+  - `wait(int *status)`: Stores the child's exit status in `status`.
+  - `wait(NULL)`: Ignores the child's exit status, just waits for termination.
+- **Return Value**: PID of the terminated child.
+- **Use Case**: To synchronize parent and child processes, ensuring the parent doesn’t proceed until the child finishes.
+
+## 3. `exec()`
+- **Purpose**: Replaces the current process's memory space with a new program.
+- **Variants**:
+  - `execl()`, `execv()`, `execvp()`, etc.
+- **Usage**: Runs a different program within the same process, typically after a `fork()`.
+- **Return**: Only returns on failure; otherwise, it does not return since the calling process is replaced.
+
+- **Use Case**: To run a new program in a process (often after `fork()`).
